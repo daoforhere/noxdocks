@@ -1,0 +1,309 @@
+.inventory {
+  width: 100%;
+  max-width: 1200px;
+  min-height: calc(100vh - 40px);
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  color: #e0e0e0;
+}
+
+.header {
+  width: 100%;
+  height: 60px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0;
+  border-bottom: 1px solid #333;
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  font-size: 2.5rem;
+  color: #fff;
+  margin: 0;
+}
+
+.header h1 span {
+  font-size: 1rem;
+  color: #666;
+  margin-left: 1rem;
+}
+
+.stats {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.stats span {
+  color: #ffd700;
+  font-size: 1.1rem;
+}
+
+.stats nav {
+  display: flex;
+  gap: 1rem;
+}
+
+.stats nav a {
+  color: #666;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.stats nav a:hover {
+  color: #fff;
+  background: #2a2a2a;
+}
+
+.stats nav a.active {
+  color: #fff;
+  background: #1a1a1a;
+}
+
+.controls {
+  width: 100%;
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.searchInput {
+  flex: 1;
+  padding: 10px;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  color: #fff;
+  border-radius: 4px;
+}
+
+.filters {
+  display: flex;
+  gap: 1rem;
+}
+
+.filterSelect,
+.sortSelect {
+  padding: 0.8rem;
+  border: none;
+  border-radius: 4px;
+  background: #1a1a1a;
+  color: #fff;
+  cursor: pointer;
+}
+
+.inventoryGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+  padding: 20px;
+}
+
+.inventorySlot {
+  aspect-ratio: 1;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.emptySlot {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 0.9em;
+  border: 2px dashed #333;
+  border-radius: 8px;
+}
+
+.inventoryItem {
+  background: #1a1a1a;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid #333;
+  transition: all 0.3s ease;
+}
+
+.inventoryItem:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.itemHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.itemHeader h3 {
+  margin: 0;
+  color: #fff;
+  font-size: 1.2rem;
+}
+
+.rarityBadge {
+  padding: 0.3rem 0.8rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.description {
+  color: #999;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
+.itemMeta {
+  display: flex;
+  justify-content: space-between;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.status {
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+}
+
+.status.已鉴定 {
+  background: #2e7d32;
+  color: #fff;
+}
+
+.status.未鉴定 {
+  background: #666;
+  color: #fff;
+}
+
+.itemFooter {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.itemInfo {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.price {
+  color: #FFD700;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.editButton, .resellButton, .destroyButton {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: bold;
+}
+
+.editButton {
+  background-color: #2196F3;
+}
+
+.editButton:hover {
+  background-color: #1976D2;
+}
+
+.resellButton {
+  background-color: #4CAF50;
+}
+
+.resellButton:hover {
+  background-color: #45a049;
+}
+
+.destroyButton {
+  background-color: #f44336;
+}
+
+.destroyButton:hover {
+  background-color: #d32f2f;
+}
+
+.expanded {
+  background: #222;
+}
+
+.editSection {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.editInput {
+  width: 100%;
+  min-height: 100px;
+  padding: 10px;
+  border: 1px solid #444;
+  border-radius: 4px;
+  background-color: #1a1a1a;
+  color: #fff;
+  font-size: 14px;
+  resize: vertical;
+  margin-bottom: 10px;
+}
+
+.editActions {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.aiResponse {
+  padding: 10px;
+  background-color: #1a1a1a;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+.aiResponse p {
+  margin: 0;
+  color: #ddd;
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.inventoryItem {
+  animation: fadeIn 0.3s ease-out;
+}
