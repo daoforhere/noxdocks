@@ -543,6 +543,17 @@ const MarketPlace = ({ onPageChange, crystalBalance, items, onPurchase, onCreate
   const [generatedTitle, setGeneratedTitle] = useState('');
   const [generatedDescription, setGeneratedDescription] = useState('');
 
+  // 确保余额是数字类型
+  const displayBalance = Number(crystalBalance);
+  const formattedBalance = isNaN(displayBalance) ? '0' : displayBalance.toLocaleString();
+
+  // 在组件的顶部添加余额监控
+  useEffect(() => {
+    if (isNaN(crystalBalance)) {
+      console.warn('Invalid balance detected:', crystalBalance);
+    }
+  }, [crystalBalance]);
+
   const handleAISubmit = async () => {
     if (!userInput.trim()) return;
     
@@ -667,22 +678,12 @@ const MarketPlace = ({ onPageChange, crystalBalance, items, onPurchase, onCreate
   const [estimatedPrice, setEstimatedPrice] = useState(0);
 
   const handlePublish = () => {
-    if (estimatedPrice > 0) {
-      // 创建新商品对象
-      const newItem = {
-        id: updatedMockItems.length + 1,
-        name: generatedTitle || userInput, // 如果没有生成标题，使用用户输入
-        description: generatedDescription || userInput, // 如果没有生成描述，使用用户输入
-        price: estimatedPrice,
-        hot: Math.random() < 0.5, // 50%的概率成为热门
-        publishTime: new Date().toISOString(),
-        rarity: getRarityByPrice(estimatedPrice)
-      };
-
-      // 调用父组件的 onCreateItem 方法
-      if (typeof onCreateItem === 'function') {
-        onCreateItem(newItem);
-      }
+    if (estimatedPrice > 0 && onCreateItem) {
+      onCreateItem(
+        generatedTitle || userInput, 
+        generatedDescription || userInput, 
+        Number(estimatedPrice)
+      );
       
       // 清空输入状态
       setUserInput('');
@@ -719,7 +720,7 @@ const MarketPlace = ({ onPageChange, crystalBalance, items, onPurchase, onCreate
       <div className={styles.header}>
         <h1>死水码头</h1>
         <div className={styles.stats}>
-          <span>水晶余额: {crystalBalance.toLocaleString()}</span>
+          <span>水晶余额: {formattedBalance}</span>
           <span>商品数量: {filteredItems.length}</span>
           <nav>
             <a href="#" className={styles.active}>货场</a>
@@ -754,7 +755,7 @@ const MarketPlace = ({ onPageChange, crystalBalance, items, onPurchase, onCreate
             key={item.id} 
             item={item} 
             onPurchase={onPurchase}
-            canAfford={crystalBalance >= item.price}
+            canAfford={displayBalance >= item.price}
           />
         ))}
       </div>

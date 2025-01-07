@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import MarketPlace from './components/MarketPlace'
 import Inventory from './components/Inventory'
 import './App.css'
@@ -36,38 +36,57 @@ const initialItems = [
 
 function App() {
   const [currentPage, setCurrentPage] = useState('market')
-  const [crystalBalance, setCrystalBalance] = useState(50000)
+  const [crystalBalance, setCrystalBalance] = useState(() => {
+    const savedBalance = localStorage.getItem('crystalBalance');
+    return savedBalance ? Number(savedBalance) : 50000;
+  })
   const [marketItems, setMarketItems] = useState(initialItems)
   const [inventoryItems, setInventoryItems] = useState([])
   const [isEditing, setIsEditing] = useState(false)
   const [editingItem, setEditingItem] = useState(null)
+
+  useEffect(() => {
+    localStorage.setItem('crystalBalance', crystalBalance);
+  }, [crystalBalance]);
 
   const handlePageChange = (page) => {
     setCurrentPage(page)
   }
 
   const handlePurchase = (item) => {
-    if (crystalBalance >= item.price) {
-      setCrystalBalance(prev => prev - item.price)
-      setMarketItems(prev => prev.filter(i => i.id !== item.id))
+    const currentBalance = Number(crystalBalance);
+    const itemPrice = Number(item.price);
+
+    if (currentBalance >= itemPrice) {
+      setCrystalBalance(prev => {
+        const newBalance = Number(prev) - itemPrice;
+        return isNaN(newBalance) ? prev : newBalance;
+      });
+      
+      setMarketItems(prev => prev.filter(i => i.id !== item.id));
       setInventoryItems(prev => [...prev, {
         ...item,
         purchaseDate: new Date().toISOString().split('T')[0],
         usable: true
-      }])
+      }]);
     }
-  }
+  };
 
   const handleResell = (item) => {
-    // 原价出售，移回货场
-    setCrystalBalance(prev => prev + item.price)
-    setInventoryItems(prev => prev.filter(i => i.id !== item.id))
+    const itemPrice = Number(item.price);
+    
+    setCrystalBalance(prev => {
+      const newBalance = Number(prev) + itemPrice;
+      return isNaN(newBalance) ? prev : newBalance;
+    });
+
+    setInventoryItems(prev => prev.filter(i => i.id !== item.id));
     setMarketItems(prev => [...prev, {
       ...item,
-      hot: false, // 二手创意不再是热门
-      publishTime: new Date().toISOString() // 添加新的发布时间
-    }])
-  }
+      hot: false,
+      publishTime: new Date().toISOString()
+    }]);
+  };
 
   const handleDestroy = (itemId) => {
     setInventoryItems(prev => prev.filter(item => item.id !== itemId))
@@ -78,6 +97,10 @@ function App() {
     const itemToEdit = inventoryItems.find(item => item.id === itemId);
     if (!itemToEdit) return;
 
+    // 确保价格是数字类型
+    const finalPrice = Number(newPrice) || itemToEdit.price;
+    const originalPrice = Number(itemToEdit.price) || 0;
+
     // 从库存中移除
     setInventoryItems(prev => prev.filter(item => item.id !== itemId));
 
@@ -85,13 +108,16 @@ function App() {
     setMarketItems(prev => [...prev, {
       ...itemToEdit,
       description: newDescription,
-      price: newPrice,
-      hot: false, // 编辑后的创意不再是热门
-      publishTime: new Date().toISOString() // 添加新的发布时间
+      price: finalPrice,
+      hot: false,
+      publishTime: new Date().toISOString()
     }]);
 
-    // 返还原价到余额
-    setCrystalBalance(prev => prev + itemToEdit.price);
+    // 更新余额：返还原价 + 新的售价
+    setCrystalBalance(prevBalance => {
+      const newBalance = Number(prevBalance) + originalPrice + finalPrice;
+      return isNaN(newBalance) ? prevBalance : newBalance;
+    });
   };
 
   const handleCreateItem = (title, description, price) => {
@@ -101,11 +127,11 @@ function App() {
     // 创建新物品
     const newItem = {
       id: newId,
-      name: title,  // 使用AI生成的标题
-      description,  // 使用AI生成的描述
-      price,
-      rarity: getRarityByPrice(price),  // 根据价格确定稀有度
-      hot: true,  // 新创意默认为热门
+      name: title,
+      description,
+      price: Number(price),
+      rarity: getRarityByPrice(price),
+      hot: true,
       publishTime: new Date().toISOString()
     };
 
@@ -113,7 +139,10 @@ function App() {
     setMarketItems(prev => [...prev, newItem]);
     
     // 发布创意时，用户获得相应的水晶奖励
-    setCrystalBalance(prev => prev + price);
+    setCrystalBalance(prev => {
+      const newBalance = Number(prev) + Number(price);
+      return isNaN(newBalance) ? prev : newBalance;
+    });
   };
 
   // 根据价格确定稀有度
