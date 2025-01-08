@@ -1,11 +1,17 @@
 .marketPlace {
-  width: 100%;
   max-width: 1200px;
-  min-height: calc(100vh - 40px);
   margin: 0 auto;
-  padding: 20px;
+  padding: 0;
+  min-height: 100vh;
+  position: relative;
+}
+
+.marketPlaceContainer {
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
+  padding-bottom: 120px; /* 为固定底部留出空间 */
+  position: relative;
 }
 
 .container {
@@ -15,14 +21,25 @@
   background-color: #0a0a0a;
   min-height: 100vh;
   color: #ffffff;
+  position: relative;
+  min-height: 100vh;
+  padding-bottom: 20px; /* 底部留白 */
+  padding-top: 60px; /* 为顶部导航栏预留空间 */
 }
 
 .header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1001; /* 确保在搜索栏之上 */
+  background: rgba(0, 0, 0, 0.98);
+  padding: 10px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
-  padding: 0 10px;
 }
 
 .header h1 {
@@ -84,33 +101,103 @@
   margin-bottom: 20px;
 }
 
+.searchAndSort {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: #1a1a1a;
+  padding: 15px;
+  display: flex;
+  gap: 10px;
+  border-bottom: 1px solid #333;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.searchAndSort > div {
+  max-width: 1200px;
+  width: 100%;
+  display: flex;
+  gap: 10px;
+}
+
 .searchInput {
   flex: 1;
-  padding: 8px;
-  border-radius: 4px;
+  padding: 8px 12px;
+  background: #2d2d2d;
   border: 1px solid #333;
-  background-color: #2a2a2a;
-  color: white;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 16px;
 }
 
 .searchInput:focus {
   outline: none;
-  border-color: #ff4444;
+  border-color: #666;
 }
 
 .sortSelect {
-  min-width: 150px;
-  padding: 0.8rem;
-  background-color: #151515;
+  padding: 8px 12px;
+  background: #2d2d2d;
   border: 1px solid #333;
   border-radius: 4px;
   color: #fff;
-  font-size: 1rem;
+  cursor: pointer;
+  min-width: 120px;
+  font-size: 16px;
 }
 
 .sortSelect:focus {
   outline: none;
-  border-color: #ff4444;
+  border-color: #666;
+}
+
+.itemList {
+  display: grid;
+  gap: 20px;
+  padding: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  padding-top: 120px; /* 增加基础顶部间距 */
+}
+
+/* 响应式布局 */
+@media screen and (max-width: 480px) {
+  .itemList {
+    grid-template-columns: 1fr; /* 手机屏幕显示1列 */
+    gap: 15px;
+    padding: 15px;
+    padding-top: 140px; /* 移动端顶部间距 */
+  }
+}
+
+@media screen and (min-width: 481px) and (max-width: 768px) {
+  .itemList {
+    grid-template-columns: repeat(2, 1fr); /* 平板显示2列 */
+    padding-top: 130px; /* 平板端顶部间距 */
+  }
+}
+
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  .itemList {
+    grid-template-columns: repeat(3, 1fr); /* 小型桌面显示3列 */
+  }
+}
+
+@media screen and (min-width: 1025px) and (max-width: 1440px) {
+  .itemList {
+    grid-template-columns: repeat(4, 1fr); /* 中型桌面显示4列 */
+  }
+}
+
+@media screen and (min-width: 1441px) {
+  .itemList {
+    grid-template-columns: repeat(5, 1fr); /* 大型桌面显示5列 */
+    max-width: 2000px; /* 限制最大宽度，避免在超宽屏幕上过度拉伸 */
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 .itemGrid {
@@ -146,21 +233,37 @@
 }
 
 .item {
-  background: linear-gradient(145deg, #1a1a1a 0%, #0a0a0a 100%);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   padding: 20px;
-  position: relative;
-  transition: transform 0.2s, box-shadow 0.2s;
+  backdrop-filter: blur(10px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border: 1px solid #333;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .item:hover {
   transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* 适配不同屏幕尺寸的内容布局 */
+@media screen and (max-width: 480px) {
+  .item {
+    padding: 15px;
+  }
+  
+  .description {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  
+  .price {
+    font-size: 16px;
+  }
 }
 
 .item h3 {
@@ -228,105 +331,85 @@
 }
 
 .createSection {
-  margin-top: 3rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  background-color: #151515;
-  padding: 2rem;
-  border-radius: 8px;
-  border: 1px solid #333;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #0a0a0a;
+  padding: 15px;
+  border-top: 1px solid #333;
+  z-index: 1000;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
 }
 
 .inputGroup {
   display: flex;
-  gap: 1rem;
+  gap: 10px;
   align-items: flex-start;
 }
 
 .createInput {
   flex: 1;
-  min-height: 120px;
-  padding: 1rem;
-  background-color: #0a0a0a;
+  height: 60px;
+  background: #1a1a1a;
   border: 1px solid #333;
   border-radius: 4px;
   color: #fff;
-  resize: vertical;
-  font-size: 1rem;
-  line-height: 1.5;
-  transition: all 0.3s ease;
+  padding: 10px;
+  resize: none;
+  font-size: 16px;
+  line-height: 1.4;
 }
 
 .createInput:focus {
   outline: none;
-  border-color: #4444ff;
-  box-shadow: 0 0 0 2px rgba(68, 68, 255, 0.1);
+  border-color: #666;
 }
 
-.aiButton {
-  padding: 0.8rem 1.5rem;
-  background-color: #2d2d2d;
-  border: 1px solid #444;
+.actionButton {
+  min-width: 100px;
+  height: 60px;
+  padding: 0 20px;
+  border: none;
   border-radius: 4px;
+  background: #2d2d2d;
   color: #fff;
+  font-size: 16px;
   cursor: pointer;
   transition: all 0.3s;
-  font-weight: 500;
-  white-space: nowrap;
-  min-width: 120px;
 }
 
-.aiButton:hover:not(:disabled) {
-  background-color: #3d3d3d;
-  border-color: #555;
+.actionButton:hover:not(:disabled) {
+  background: #3d3d3d;
 }
 
-.aiButton.loading {
-  position: relative;
+.actionButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.actionButton.loading {
+  background: #2d2d2d;
   cursor: wait;
-  opacity: 0.8;
 }
 
-.aiButton.loading::after {
-  content: '';
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  top: 50%;
-  left: 50%;
-  margin-top: -8px;
-  margin-left: -8px;
-  border: 2px solid #ffffff;
-  border-radius: 50%;
-  border-top-color: transparent;
-  animation: spin 1s linear infinite;
+.actionButton.publish {
+  background: #ff4444;
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+.actionButton.publish:hover:not(:disabled) {
+  background: #ff6666;
 }
 
 .aiResponse {
-  background-color: #1a1a1a;
+  background: #1a1a1a;
   border: 1px solid #333;
   border-radius: 4px;
-  padding: 1.5rem;
-  margin-top: 1rem;
-}
-
-.aiResponse h3 {
-  color: #4444ff;
-  margin-bottom: 1rem;
-  font-size: 1.1rem;
-}
-
-.aiResponse p {
-  color: #ccc;
-  line-height: 1.6;
-  white-space: pre-wrap;
+  padding: 10px;
+  margin-top: 10px;
+  color: #fff;
+  font-size: 16px;
+  line-height: 1.4;
 }
 
 .createButton {
@@ -348,12 +431,6 @@
   transform: scale(1.02);
 }
 
-.buttonGroup {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-}
-
 .cancelButton {
   padding: 10px 20px;
   border: none;
@@ -373,6 +450,20 @@
   cursor: not-allowed;
 }
 
+.publishButton {
+  padding: 10px 20px;
+  background-color: #ff4444;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.publishButton:hover {
+  background-color: #ff6666;
+}
+
 .itemMeta {
   display: flex;
   justify-content: space-between;
@@ -380,22 +471,6 @@
   margin-top: 10px;
   padding-top: 10px;
   border-top: 1px solid #333;
-}
-
-.publishButton {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  background-color: #4CAF50;
-  color: white;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-weight: bold;
-}
-
-.publishButton:hover {
-  background-color: #45a049;
-  transform: translateY(-1px);
 }
 
 .description {
@@ -409,4 +484,36 @@
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
+}
+
+.searchBar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.95); /* 增加不透明度 */
+  backdrop-filter: blur(10px);
+  padding: 15px 20px; /* 增加上下内边距 */
+  z-index: 1000;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* 添加微妙的边框 */
+}
+
+@media screen and (max-width: 768px) {
+  .searchBar {
+    flex-direction: column;
+    padding: 10px;
+    height: auto; /* 自适应高度 */
+  }
+  
+  .searchBar input,
+  .searchBar select {
+    width: 100%;
+    margin: 5px 0;
+    height: 36px; /* 统一输入框高度 */
+  }
 }
