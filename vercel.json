@@ -1,0 +1,11 @@
+{
+  "rewrites": [
+    {
+      "source": "/noxdocks/:path*",
+      "destination": "/:path*"
+    }
+  ],
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "framework": "vite"
+}

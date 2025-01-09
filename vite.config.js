@@ -8,5 +8,5 @@ export default defineConfig({
     host: true,
     strictPort: false
   },
-  base: '/noxdocks/',
+  base: process.env.VERCEL ? '/' : '/noxdocks/'
 })
