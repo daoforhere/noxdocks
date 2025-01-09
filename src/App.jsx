@@ -3,6 +3,8 @@ import MarketPlace from './components/MarketPlace'
 import Inventory from './components/Inventory'
 import './App.css'
 
+// Trigger new deployment with correct base path
+
 // 初始商品列表
 const initialItems = [
   {
